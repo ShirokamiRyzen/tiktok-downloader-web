@@ -20,7 +20,7 @@
 
     <main class="flex-grow container mx-auto px-4 py-8">
         <div id="form-container" class="max-w-md mx-auto bg-gray-800 rounded-lg shadow-md p-6 mt-48">
-            <form action="process.php" method="POST" class="space-y-4">
+            <form action="fetch.php" method="POST" class="space-y-4">
                 <div>
                     <label for="tiktok-url" class="block text-sm font-medium text-gray-400">TikTok Video URL</label>
                     <input type="url" id="tiktok-url" name="tiktok_url" required
