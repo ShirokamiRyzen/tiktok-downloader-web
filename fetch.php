@@ -1,5 +1,5 @@
 <?php
-// Normalisasi format kedalam bentuk yang readable
+// Fungsi untuk memformat ukuran file menjadi lebih mudah dibaca
 function formatSize($bytes)
 {
     if ($bytes >= 1073741824) {
@@ -40,12 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($data['success']) {
                 $video_data = $data['data']['data'];
 
-                // Format size menggunakan function formatSize
+                // Format ukuran file menggunakan fungsi formatSize
                 $size = formatSize($video_data['size']);
                 $wm_size = formatSize($video_data['wm_size']);
                 $hd_size = formatSize($video_data['hd_size']);
 
-                // Menyimpan data ke session untuk akses di halaman depan
+                // Simpan data ke session untuk digunakan di halaman depan
                 $_SESSION['video_data'] = [
                     'title' => $video_data['title'],
                     'cover' => $video_data['cover'],
@@ -56,20 +56,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'hdplay' => $video_data['hdplay'],
                     'hd_size' => $hd_size,
                     'author' => $video_data['author']['nickname'],
+                    'author_avatar' => $video_data['author']['avatar'],
+                    'author_username' => $video_data['author']['unique_id'],
                     'play_count' => $video_data['play_count'],
                     'digg_count' => $video_data['digg_count'],
                     'comment_count' => $video_data['comment_count'],
                     'share_count' => $video_data['share_count'],
                     'download_count' => $video_data['download_count'],
                     'collect_count' => $video_data['collect_count'],
-                    'create_time' => $video_data['create_time']
+                    'create_time' => $video_data['create_time'],
+                    'music' => [
+                        'title' => $video_data['music_info']['title'],
+                        'play_url' => $video_data['music_info']['play']
+                    ]
                 ];
 
-                // Redirect to the index page
+                // Redirect ke halaman depan
                 header("Location: index.php");
                 exit;
             } else {
-                $_SESSION['error'] = $data['message'] ?? 'Unknown error.';
+                $_SESSION['error'] = $data['data']['msg'] ?? 'Unknown error.';
                 header("Location: index.php");
                 exit;
             }

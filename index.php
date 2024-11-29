@@ -7,6 +7,10 @@
     <link rel="icon" href="./public/img/favicon.ico" type="image/x-icon">
     <title>TikTok Video Downloader</title>
     <link href="./public/css/tailwind.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.min.js"></script>
 </head>
 
 <body class="bg-gray-900 text-white min-h-screen flex flex-col">
@@ -29,7 +33,7 @@
                 </div>
                 <button type="submit"
                     class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
-                    Download Video
+                    <i class="fa-solid fa-download"></i> Download Video
                 </button>
             </form>
         </div>
@@ -45,34 +49,60 @@
 
         <?php if (isset($_SESSION['video_data'])): ?>
             <div id="result" class="mt-8 max-w-md mx-auto bg-gray-800 rounded-lg shadow-md p-6">
-                <h2 class="text-xl font-semibold mb-4">Download Result</h2>
-                <img src="<?= htmlspecialchars($_SESSION['video_data']['cover']) ?>" alt="Video Cover"
-                    class="rounded-md mb-4 w-full">
-                <p class="text-lg font-bold"><?= htmlspecialchars($_SESSION['video_data']['title']) ?></p>
+                <div class="flex items-center mb-4">
+                    <!-- Gambar kecil -->
+                    <img src="<?= htmlspecialchars($_SESSION['video_data']['author_avatar']) ?>" alt="Author Profile"
+                        class="w-12 rounded-full mr-2">
+                    <div>
+                        <!-- Nama dan Username -->
+                        <p class="text-sm font-medium"><?= htmlspecialchars($_SESSION['video_data']['author']) ?></p>
+                        <p class="text-xs text-gray-500">
+                            @<?= htmlspecialchars($_SESSION['video_data']['author_username']) ?></p>
+                    </div>
+                </div>
+
+                <video id="player" playsinline controls class="mb-4 w-full">
+                    <source src="<?= htmlspecialchars($_SESSION['video_data']['play']) ?>" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+
+                <p class="text-lg font-bold mt-4"><?= htmlspecialchars($_SESSION['video_data']['title']) ?></p>
                 <p class="text-sm text-gray-400">By <?= htmlspecialchars($_SESSION['video_data']['author']) ?></p>
 
                 <div class="mt-4 space-y-2">
                     <div class="flex justify-between items-center">
                         <span>SD Video:</span>
                         <a href="<?= htmlspecialchars($_SESSION['video_data']['play']) ?>" download
-                            class="bg-green-500 text-white py-1 px-4 rounded-md hover:bg-green-600">
+                            class="bg-green-500 text-white py-1 px-4 rounded-md hover:bg-green-600"><i
+                                class="fa-solid fa-download"></i>
                             <?= htmlspecialchars($_SESSION['video_data']['size']) ?>
                         </a>
                     </div>
                     <div class="flex justify-between items-center">
                         <span>HD Video:</span>
                         <a href="<?= htmlspecialchars($_SESSION['video_data']['hdplay']) ?>" download
-                            class="bg-yellow-500 text-white py-1 px-4 rounded-md hover:bg-yellow-600">
+                            class="bg-yellow-500 text-white py-1 px-4 rounded-md hover:bg-yellow-600"><i
+                                class="fa-solid fa-download"></i>
                             <?= htmlspecialchars($_SESSION['video_data']['hd_size']) ?>
                         </a>
                     </div>
                     <div class="flex justify-between items-center">
                         <span>Video with WM:</span>
                         <a href="<?= htmlspecialchars($_SESSION['video_data']['wmplay']) ?>" download
-                            class="bg-blue-500 text-white py-1 px-4 rounded-md hover:bg-blue-600">
+                            class="bg-blue-500 text-white py-1 px-4 rounded-md hover:bg-blue-600"><i
+                                class="fa-solid fa-download"></i>
                             <?= htmlspecialchars($_SESSION['video_data']['wm_size']) ?>
                         </a>
                     </div>
+                </div>
+
+                <div class="mt-6">
+                    <h3 class="text-lg font-bold">Audio Info:</h3>
+                    <p class="text-gray-400"><?= htmlspecialchars($_SESSION['video_data']['music']['title']) ?></p>
+                    <a href="<?= htmlspecialchars($_SESSION['video_data']['music']['play_url']) ?>" download
+                        class="mt-2 inline-block bg-purple-600 text-white py-1 px-4 rounded-md hover:bg-purple-700">
+                        <i class="fa-solid fa-download"></i> Audio
+                    </a>
                 </div>
 
                 <div class="mt-6">
@@ -113,6 +143,9 @@
             if (result && formContainer) {
                 formContainer.classList.remove('mt-48');
             }
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const player = new Plyr('#player');
         });
     </script>
 </body>
